@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'Widgets/AddMoodFlotingBot.dart';
 import 'Widgets/NotesViewBody.dart';
 
@@ -11,9 +12,10 @@ class NotesView extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showModalBottomSheet(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(18),
-            ),
+              isScrollControlled: true,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              ),
               context: context,
               builder: (context) {
                 return const AddMood();

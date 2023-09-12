@@ -1,35 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:noteapp/Views/Widgets/CustomeTwxtField.dart';
-
-import 'CustomButton.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:noteapp/cubit/add_note_cubit.dart';
+import '../../cubit/reading_notes_cubit.dart';
+import 'add_note_form.dart';
 
 class AddMood extends StatelessWidget {
   const AddMood({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: SingleChildScrollView(
-        child: Column(
-          children:
-          [
-            Padding(
-              padding: const EdgeInsets.only(top: 28.0,left: 16,right: 16,bottom: 12),
-              child: CustomTextField(hintText: 'Title', maxLines: 1,),
+    return BlocProvider(
+      create: (context) => AddNoteCubit(),
+      child: BlocConsumer<AddNoteCubit, AddNoteState>(
+        listener: (context, state) {
+          if (state is AddNoteFailure) {
+          }
+          if (state is AddNoteSuccess) {
+            BlocProvider.of<ReadingNotesCubit>(context).fetchAllNotes();
+            Navigator.pop(context);
+          }
+        },
+        builder: (context, state) {
+          return AbsorbPointer(
+            absorbing: state is AddNoteLoading ? true : false,
+            child:  Padding(
+              padding: EdgeInsets.only(right: 8.0,left: 8,top: 8,bottom : MediaQuery.of(context).viewInsets.bottom),
+              child: const SingleChildScrollView(
+                child: AddNoteForm(),
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0,left: 16,right: 16,bottom: 12),
-              child: CustomTextField(hintText: 'Content',maxLines: 5,),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CustomButton(ButtonName: 'Add'),
-            ),
-            SizedBox(height: 12,)
-          ],
-
-        ),
+          );
+        },
       ),
     );
   }
